@@ -105,6 +105,8 @@ services:
     build:
       context: ./apps/web
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:3505
     container_name: survey_web
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:3505
