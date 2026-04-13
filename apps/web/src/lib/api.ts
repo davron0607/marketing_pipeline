@@ -26,8 +26,14 @@ api.interceptors.response.use(
 );
 
 // Auth
-export const login = (email: string, password: string) =>
-  api.post("/auth/login", { username: email, password });
+export const login = (email: string, password: string) => {
+  const form = new URLSearchParams();
+  form.append("username", email);
+  form.append("password", password);
+  return api.post("/auth/login", form, {
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  });
+};
 
 // Projects
 export const getProjects = () => api.get("/projects");
