@@ -10,10 +10,13 @@ import { Card } from "@/components/ui/Card";
 
 interface Upload {
   id: number;
-  filename: string;
-  file_size: number;
+  filename?: string;
+  original_filename?: string;
+  file_size?: number;
+  file_size_bytes?: number;
   row_count: number | null;
   created_at: string;
+  upload_status?: string;
 }
 
 export default function UploadPage() {
@@ -84,11 +87,14 @@ export default function UploadPage() {
             {(uploads as Upload[]).map((u) => (
               <div key={u.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{u.filename}</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    {u.original_filename ?? u.filename}
+                  </p>
                   <p className="text-xs text-gray-400">
-                    {(u.file_size / 1024).toFixed(1)} KB
+                    {((u.file_size_bytes ?? u.file_size ?? 0) / 1024).toFixed(1)} KB
                     {u.row_count ? ` · ${u.row_count} rows` : ""}
-                    · {new Date(u.created_at).toLocaleString()}
+                    {u.upload_status ? ` · ${u.upload_status}` : ""}
+                    {" · "}{new Date(u.created_at).toLocaleString()}
                   </p>
                 </div>
               </div>

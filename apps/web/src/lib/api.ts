@@ -25,7 +25,7 @@ api.interceptors.response.use(
   }
 );
 
-// Auth
+// ── Auth ──────────────────────────────────────────────────────────────────────
 export const login = (email: string, password: string) => {
   const form = new URLSearchParams();
   form.append("username", email);
@@ -35,39 +35,44 @@ export const login = (email: string, password: string) => {
   });
 };
 
-// Projects
+// ── Projects ──────────────────────────────────────────────────────────────────
 export const getProjects = () => api.get("/projects");
 export const getProject = (id: number) => api.get(`/projects/${id}`);
 export const createProject = (data: { name: string; description?: string }) =>
   api.post("/projects", data);
 
-// Uploads
+// ── Uploads (new ingestion endpoint) ─────────────────────────────────────────
 export const uploadDataset = (projectId: number, file: File) => {
   const form = new FormData();
   form.append("file", file);
-  return api.post(`/uploads/project/${projectId}`, form, {
+  return api.post(`/projects/${projectId}/uploads`, form, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
 export const getUploads = (projectId: number) =>
   api.get(`/uploads/project/${projectId}`);
 
-// Jobs
+// ── Jobs ──────────────────────────────────────────────────────────────────────
 export const runAnalysis = (projectId: number, uploadId: number) =>
   api.post("/jobs", { project_id: projectId, upload_id: uploadId, job_type: "full_analysis" });
 export const getJobs = (projectId: number) =>
   api.get(`/jobs?project_id=${projectId}`);
 export const getJob = (id: number) => api.get(`/jobs/${id}`);
 
-// Fraud
+// ── Fraud ─────────────────────────────────────────────────────────────────────
 export const getFraudSummary = (projectId: number) =>
-  api.get(`/fraud/project/${projectId}`);
+  api.get(`/projects/${projectId}/fraud-summary`);
 
-// Analytics
+// ── Analytics ─────────────────────────────────────────────────────────────────
 export const getAnalytics = (projectId: number) =>
-  api.get(`/analytics/project/${projectId}`);
+  api.get(`/projects/${projectId}/analytics-summary`);
 
-// Reports
+// ── Reports ───────────────────────────────────────────────────────────────────
+export const generateReport = (projectId: number) =>
+  api.post(`/projects/${projectId}/generate-report`);
+export const getLatestReport = (projectId: number) =>
+  api.get(`/projects/${projectId}/reports/latest`);
+// Legacy list endpoint (kept for compatibility)
 export const getReports = (projectId: number) =>
   api.get(`/reports/project/${projectId}`);
 export const downloadReport = (reportId: number) =>
