@@ -49,6 +49,22 @@ services:
       timeout: 5s
       retries: 5
 
+  minio-init:
+    image: minio/mc:latest
+    container_name: survey_minio_init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      sh -c "
+        mc alias set local http://minio:9000 minioadmin minioadmin &&
+        mc mb --ignore-existing local/raw-uploads &&
+        mc mb --ignore-existing local/reports &&
+        mc mb --ignore-existing local/survey-datasets &&
+        echo 'Buckets created.'
+      "
+    restart: on-failure
+
   api:
     build:
       context: ./apps/api

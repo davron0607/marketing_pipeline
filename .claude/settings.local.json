@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m 'Remap MinIO ports to 9002/9003 to avoid host port conflict:*)",
+      "Bash(git push:*)",
+      "Bash(git commit -m 'Remap Postgres host port to 5433 to avoid conflict:*)",
+      "Bash(git commit -m 'Remap web to port 3001 \\(3000 already in use on host\\):*)",
+      "Bash(git commit -m 'Fix login to send form-encoded data for OAuth2PasswordRequestForm:*)",
+      "Bash(rm /Users/davron/Downloads/Projects/Claude/marketing_pipeline/.git/index.lock)"
+    ]
+  }
+}

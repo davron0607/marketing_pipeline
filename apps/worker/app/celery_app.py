@@ -9,6 +9,10 @@ celery_app = Celery(
         "app.tasks.analysis_tasks",
         "app.tasks.fraud_tasks",
         "app.tasks.report_tasks",
+        "app.tasks.ingestion_tasks",
+        "app.tasks.feature_tasks",
+        "app.tasks.scoring_tasks",
+        "app.tasks.analytics_tasks",
     ],
 )
 

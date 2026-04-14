@@ -1,0 +1,4 @@
+apps/api/alembic/__pycache__
+apps/api/alembic/versions/__pycache__
+apps/api/app/**/__pycache__
+apps/worker/app/**/__pycache__
