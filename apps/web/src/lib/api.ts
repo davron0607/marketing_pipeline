@@ -50,7 +50,7 @@ export const uploadDataset = (projectId: number, file: File) => {
   });
 };
 export const getUploads = (projectId: number) =>
-  api.get(`/uploads/project/${projectId}`);
+  api.get(`/projects/${projectId}/uploads`);
 
 // ── Jobs ──────────────────────────────────────────────────────────────────────
 export const runAnalysis = (projectId: number, uploadId: number) =>
