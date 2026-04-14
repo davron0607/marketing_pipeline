@@ -53,11 +53,7 @@ export default function ReportPage() {
   };
 
   const handleDownload = (url: string) => {
-    // Replace internal Docker hostname with public host port
-    const publicUrl = url
-      .replace("http://minio:9000", `http://localhost:3503`)
-      .replace("https://minio:9000", `http://localhost:3503`);
-    window.open(publicUrl, "_blank");
+    window.open(url, "_blank");
   };
 
   return (

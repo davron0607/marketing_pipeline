@@ -119,9 +119,13 @@ async def get_latest_report(
             import boto3
             from botocore.config import Config
             settings = get_settings()
+            # Sign the URL against the PUBLIC endpoint (browser-reachable).
+            # MINIO_PUBLIC_ENDPOINT = "localhost:3503" outside Docker.
+            scheme = "https" if settings.MINIO_SECURE else "http"
+            public_ep = settings.MINIO_PUBLIC_ENDPOINT
             s3 = boto3.client(
                 "s3",
-                endpoint_url=f"http{'s' if settings.MINIO_SECURE else ''}://{settings.MINIO_ENDPOINT}",
+                endpoint_url=f"{scheme}://{public_ep}",
                 aws_access_key_id=settings.MINIO_ACCESS_KEY,
                 aws_secret_access_key=settings.MINIO_SECRET_KEY,
                 config=Config(signature_version="s3v4"),
