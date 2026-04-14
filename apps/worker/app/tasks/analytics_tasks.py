@@ -297,7 +297,7 @@ def _save_analytics(db, rows: list) -> None:
                 "INSERT INTO analytics_results "
                 "(project_id, job_run_id, analysis_type, question_key, result_data, insight_text) "
                 "VALUES (:project_id, :job_run_id, :analysis_type, :question_key, "
-                ":result_data::jsonb, :insight_text)"
+                "cast(:result_data as jsonb), :insight_text)"
             ),
             chunk,
         )

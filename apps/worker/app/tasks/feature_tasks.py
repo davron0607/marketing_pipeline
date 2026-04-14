@@ -183,7 +183,7 @@ def compute_response_features(self, job_run_id: int, project_id: int):
                     ":straightline_ratio, :answer_entropy, :longstring_max, :duplicate_answer_vector_hash, "
                     ":open_text_length_mean, :open_text_uniqueness_score, :attention_fail_count, :contradiction_count, "
                     ":device_submission_count_24h, :ip_submission_count_24h, :missingness_ratio, "
-                    ":features_json::jsonb, :computed_at)"
+                    "cast(:features_json as jsonb), :computed_at)"
                 ),
                 chunk,
             )

@@ -175,26 +175,22 @@ def process_uploaded_survey_file(
             })
 
         import json
-        # Batch insert in chunks
+        # Insert rows one at a time — executemany conflicts with cast(:x as jsonb) syntax
+        SQL = text(
+            "INSERT INTO survey_responses "
+            "(project_id, upload_file_id, job_run_id, respondent_id, raw_data, normalized_data, row_index) "
+            "VALUES (:project_id, :upload_file_id, :job_run_id, :respondent_id, "
+            "cast(:raw_data as jsonb), cast(:normalized_data as jsonb), :row_index)"
+        )
         CHUNK = 500
         for i in range(0, len(rows_to_insert), CHUNK):
             chunk = rows_to_insert[i:i + CHUNK]
-            db.execute(
-                text(
-                    "INSERT INTO survey_responses "
-                    "(project_id, upload_file_id, job_run_id, respondent_id, raw_data, normalized_data, row_index) "
-                    "VALUES (:project_id, :upload_file_id, :job_run_id, :respondent_id, "
-                    ":raw_data::jsonb, :normalized_data::jsonb, :row_index)"
-                ),
-                [
-                    {
-                        **r,
-                        "raw_data": json.dumps(r["raw_data"]),
-                        "normalized_data": json.dumps(r["normalized_data"]),
-                    }
-                    for r in chunk
-                ],
-            )
+            for r in chunk:
+                db.execute(SQL, {
+                    **r,
+                    "raw_data": json.dumps(r["raw_data"]),
+                    "normalized_data": json.dumps(r["normalized_data"]),
+                })
             db.commit()
             logger.info("Inserted chunk %d-%d", i, i + len(chunk))
 

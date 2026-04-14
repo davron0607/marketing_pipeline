@@ -97,7 +97,7 @@ def run_fraud_scoring(self, job_run_id: int, project_id: int, config_id: int | N
                     text(
                         "INSERT INTO fraud_score_configs "
                         "(project_id, config_name, weights, thresholds, is_active) "
-                        "VALUES (:p, 'Default', :w::jsonb, :t::jsonb, true) RETURNING id"
+                        "VALUES (:p, 'Default', cast(:w as jsonb), cast(:t as jsonb), true) RETURNING id"
                     ),
                     {
                         "p": project_id,
@@ -187,7 +187,7 @@ def run_fraud_scoring(self, job_run_id: int, project_id: int, config_id: int | N
                     "(project_id, survey_response_id, response_features_id, fraud_score, "
                     "fraud_label, fraud_reasons, component_scores, config_id, scored_at) "
                     "VALUES (:project_id, :survey_response_id, :response_features_id, :fraud_score, "
-                    ":fraud_label, :fraud_reasons::jsonb, :component_scores::jsonb, :config_id, :scored_at)"
+                    ":fraud_label, cast(:fraud_reasons as jsonb), cast(:component_scores as jsonb), :config_id, :scored_at)"
                 ),
                 chunk,
             )
