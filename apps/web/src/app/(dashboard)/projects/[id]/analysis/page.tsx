@@ -140,7 +140,7 @@ export default function AnalysisPage() {
                 {Object.entries(data.distributions).map(([key, dist]) => (
                   <div key={key}>
                     <h3 className="text-sm font-semibold text-gray-800 mb-2 capitalize">{key.replace(/_/g, " ")}</h3>
-                    {dist.type === "single_choice" && dist.data.counts && (
+                    {dist.type === "single_choice" && Boolean((dist.data as Record<string, unknown>).counts) && (
                       <SingleChoiceChart data={dist.data as { counts: Record<string, number>; percentages: Record<string, number>; total: number }} />
                     )}
                     {dist.type === "numeric" && (
@@ -148,8 +148,8 @@ export default function AnalysisPage() {
                     )}
                     {dist.type === "text" && (
                       <p className="text-xs text-gray-500">
-                        {(dist.data as { count?: number }).count ?? 0} responses ·{" "}
-                        {(dist.data as { avg_length?: number }).avg_length?.toFixed(0) ?? 0} avg chars
+                        {((dist.data as { count?: number }).count ?? 0)} responses ·{" "}
+                        {((dist.data as { avg_length?: number }).avg_length?.toFixed(0) ?? 0)} avg chars
                       </p>
                     )}
                   </div>
