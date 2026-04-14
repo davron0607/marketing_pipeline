@@ -278,7 +278,7 @@ def main():
                 text(
                     "INSERT INTO survey_responses "
                     "(project_id, upload_file_id, job_run_id, respondent_id, raw_data, normalized_data, row_index) "
-                    "VALUES (:p, :u, :j, :r, :raw::jsonb, :norm::jsonb, :ri) RETURNING id"
+                    "VALUES (:p, :u, :j, :r, cast(:raw as jsonb), cast(:norm as jsonb), :ri) RETURNING id"
                 ),
                 {
                     "p": project_id,
@@ -378,7 +378,7 @@ def main():
                     ":straightline_ratio, :answer_entropy, :longstring_max, :duplicate_answer_vector_hash, "
                     ":open_text_length_mean, :open_text_uniqueness_score, :attention_fail_count, :contradiction_count, "
                     ":device_submission_count_24h, :ip_submission_count_24h, :missingness_ratio, "
-                    ":features_json::jsonb, :now) RETURNING id"
+                    "cast(:features_json as jsonb), :now) RETURNING id"
                 ),
                 {**fr, "p": project_id},
             )
@@ -397,7 +397,7 @@ def main():
         cfg_row = conn.execute(
             text(
                 "INSERT INTO fraud_score_configs (project_id, config_name, weights, thresholds, is_active) "
-                "VALUES (:p, 'Default', :w::jsonb, :t::jsonb, true) RETURNING id"
+                "VALUES (:p, 'Default', cast(:w as jsonb), cast(:t as jsonb), true) RETURNING id"
             ),
             {"p": project_id, "w": json.dumps(WEIGHTS), "t": json.dumps(THRESHOLDS)},
         ).fetchone()
@@ -527,7 +527,7 @@ def main():
                     "INSERT INTO fraud_scores "
                     "(project_id, survey_response_id, response_features_id, fraud_score, fraud_label, "
                     "fraud_reasons, component_scores, config_id, scored_at) "
-                    "VALUES (:p, :sr, :rf, :score, :label, :reasons::jsonb, :components::jsonb, :cfg, :scored_at)"
+                    "VALUES (:p, :sr, :rf, :score, :label, cast(:reasons as jsonb), cast(:components as jsonb), :cfg, :scored_at)"
                 ),
                 fs,
             )
@@ -614,7 +614,7 @@ def main():
             conn.execute(
                 text(
                     "INSERT INTO analytics_results (project_id, job_run_id, analysis_type, question_key, result_data, insight_text) "
-                    "VALUES (:p, :j, :atype, :qkey, :rdata::jsonb, :itext)"
+                    "VALUES (:p, :j, :atype, :qkey, cast(:rdata as jsonb), :itext)"
                 ),
                 ar,
             )
