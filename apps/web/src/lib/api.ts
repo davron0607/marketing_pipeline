@@ -51,6 +51,22 @@ export const uploadDataset = (projectId: number, file: File) => {
 };
 export const getUploads = (projectId: number) =>
   api.get(`/projects/${projectId}/uploads`);
+export const deleteUpload = (projectId: number, uploadId: number) =>
+  api.delete(`/projects/${projectId}/uploads/${uploadId}`);
+export const uploadDatasetWithProgress = (
+  projectId: number,
+  file: File,
+  onProgress: (pct: number) => void
+) => {
+  const form = new FormData();
+  form.append("file", file);
+  return api.post(`/projects/${projectId}/uploads`, form, {
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (e) => {
+      if (e.total) onProgress(Math.round((e.loaded / e.total) * 100));
+    },
+  });
+};
 
 // ── Jobs ──────────────────────────────────────────────────────────────────────
 export const runAnalysis = (projectId: number, uploadId: number) =>
